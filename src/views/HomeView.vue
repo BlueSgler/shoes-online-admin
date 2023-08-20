@@ -1,9 +1,34 @@
-<script setup lang="ts"></script>
-
 <template>
-  <main>
-    <el-button type="primary">Primary</el-button>
-    <el-button type="success">Success</el-button>
-    <el-button type="info">Info</el-button>
-  </main>
+  <div id="home">
+    <el-container>
+      <el-header>
+        <AdminHeader></AdminHeader>
+      </el-header>
+      <el-container>
+        <el-aside width="200px">
+          <AdminMenu></AdminMenu>
+        </el-aside>
+        <el-main>Main</el-main>
+      </el-container>
+    </el-container>
+  </div>
 </template>
+<script setup lang="ts">
+import AdminHeader from "@/components/layout/AdminHeader.vue";
+import AdminMenu from "@/components/layout/AdminMenu.vue"
+</script>
+
+<style lang="scss" scoped>
+#home {
+  min-height: 100vh;
+  // background-color: #ea7d7d;
+}
+.el-header {
+  background-color:#2b2c44;
+  padding: 0;
+}
+
+.el-aside {
+  background-color:#2b2c44;
+}
+</style>

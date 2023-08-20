@@ -1,6 +1,6 @@
 import axios, { AxiosError } from "axios";
 import type { AxiosRequestConfig } from "axios";
-import { ElMessage } from "element-plus";
+import { ElLoading, ElMessage } from "element-plus";
 export const httpInstance = axios.create();
 
 export type BkResponse = {
@@ -15,6 +15,7 @@ httpInstance.defaults.baseURL = import.meta.env.VITE_BASEURL;
 
 //配置响应拦截器
 export const $http = async (config: AxiosRequestConfig) => {
+  const loadingInstance = ElLoading.service();
   try {
     const axiosResponse = await httpInstance<BkResponse>(config);
     const bkResponse = axiosResponse.data;
@@ -43,5 +44,7 @@ export const $http = async (config: AxiosRequestConfig) => {
       ElMessage.error("网络错误");
     }
     throw err;
+  } finally {
+    loadingInstance.close();
   }
 };
