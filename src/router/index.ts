@@ -9,12 +9,29 @@ const router = createRouter({
   routes: [
     {
       path: "/",
-      redirect: "/home",
+      redirect: "/home/admin-home",
     },
     {
       path: "/home",
       name: "home",
       component: HomeView,
+      children: [
+        {
+          path: "admin-home",
+          name: "admin-home",
+          component: () => import("@/components/home/AdminHome.vue"),
+        },
+        {
+          path: "users",
+          name: "users",
+          component: () => import("@/components/users/UserManagement.vue"),
+        },
+        {
+          path: "goods",
+          name: "goods",
+          component: () => import("@/components/goods/GoodsManagement.vue"),
+        },
+      ],
     },
     {
       path: "/login",
