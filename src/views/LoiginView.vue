@@ -56,7 +56,7 @@ const formRef = ref<FormInstance>();
 
 const login = async () => {
   const res = await loginApi(form.value);
-  userInfoStore.setAuth(res.data);
+  userInfoStore.setAuth(res.data.token);
   router.push("/home/admin-home");
 };
 

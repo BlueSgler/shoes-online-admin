@@ -5,11 +5,9 @@
         <AdminHeader></AdminHeader>
       </el-header>
       <el-container>
-        <el-affix>
-          <el-aside width="200px">
-            <AdminMenu></AdminMenu>
-          </el-aside>
-        </el-affix>
+        <el-aside width="200px">
+          <el-affix><AdminMenu></AdminMenu></el-affix>
+        </el-aside>
         <el-main>
           <RouterView></RouterView>
         </el-main>
@@ -20,6 +18,15 @@
 <script setup lang="ts">
 import AdminHeader from "@/components/layout/AdminHeader.vue";
 import AdminMenu from "@/components/layout/AdminMenu.vue";
+import { useUserInfoStore } from "@/stores/userInfo.store";
+import { getUserinfoApi } from "@/apis/login";
+import type { BkResponse } from "@/apis";
+const userInfoStore = useUserInfoStore();
+const getUserinfo = async () => {
+  const res: BkResponse = await getUserinfoApi();
+  userInfoStore.userinfo = res.data;
+};
+getUserinfo();
 </script>
 
 <style lang="scss" scoped>

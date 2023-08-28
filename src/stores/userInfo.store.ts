@@ -15,7 +15,7 @@ export interface Userinfo {
 
 export const useUserInfoStore = defineStore("userinfo-store", () => {
   const userinfo = ref<Userinfo>();
-  const setAuth = (token: string) => {
+  const setAuth = (token: string) => {    
     httpInstance.defaults.headers.common.Authorization = token;
     localStorage.setItem("token", token);
   };

@@ -10,3 +10,13 @@ export const loginApi = (data: { password: string; username: string }) => {
     data,
   });
 };
+
+/**
+ * 获取用户信息
+ */
+export const getUserinfoApi = () => {
+  return $http({
+    method: "GET",
+    url: "/user/info",
+  });
+}
