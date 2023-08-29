@@ -25,7 +25,7 @@ export const $http = async (config: AxiosRequestConfig) => {
       if (bkResponse.code === 401) {
         errTilte = "Unauthorized";
         ElMessage.error("未授权");
-        // router.push("/login");
+        router.push("/login");
       } else if (bkResponse.code === 403) {
         errTilte = "Forbidden";
       } else if (bkResponse.code === 9999) {

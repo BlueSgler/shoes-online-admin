@@ -8,6 +8,9 @@ export const loginApi = (data: { password: string; username: string }) => {
     method: "POST",
     url: "/admin/login",
     data,
+    headers: {
+      Authorization: undefined,
+    },
   });
 };
 
@@ -19,4 +22,4 @@ export const getUserinfoApi = () => {
     method: "GET",
     url: "/user/info",
   });
-}
+};
