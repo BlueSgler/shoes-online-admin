@@ -16,11 +16,11 @@
             <el-button :icon="Search" @click="search" />
           </template>
         </el-input>
-        <el-button type="danger" @click="deleteUsers">批量禁用</el-button>
+        <el-button type="danger" @click="disableUsers">批量禁用</el-button>
+        <el-button type="primary" @click="enableUsers">批量解禁</el-button>
       </div>
       <el-table
         :data="searchRes.length ? searchRes : tableData"
-        ref="multipleTableRef"
         @selection-change="handleSelectionChange"
       >
         <el-table-column type="selection" width="55" />
@@ -45,7 +45,8 @@
           <template #default="scope">
             <el-switch
               v-model="scope.row.status"
-              style="--el-switch-on-color: #3799ff"
+              style="--el-switch-on-color: #ff4949"
+              @change="toggleUserStatus([scope.row.id])"
             />
           </template>
         </el-table-column>
@@ -97,8 +98,6 @@ interface User {
   updateTime: Date;
   username: string;
 }
-const multipleTableRef = ref<InstanceType<typeof ElTable>>();
-const multipleSelection = ref<User[]>([]);
 const handleEdit = (index: number, row: User) => {
   console.log(index, row);
 };
@@ -113,6 +112,7 @@ const getUserlist = async () => {
   tableData.value = res.data.records;
 
   total.value = res.data.totalElements;
+  selectedUsers.value = [];
 };
 const searchRes = ref<User[]>([]);
 const search = () => {
@@ -123,20 +123,37 @@ const search = () => {
   );
 };
 
-const ids = ref<number[]>([]);
+const selectedUsers = ref<User[]>([]);
+
+//手动选择
 const handleSelectionChange = (val: User[]) => {
-  multipleSelection.value = val;
-  console.log(multipleSelection.value);
-  multipleSelection.value.forEach((item) => {
-    ids.value.push(item.id);
-  });
-  // 去重
-  ids.value = Array.from(new Set(ids.value));
+  selectedUsers.value = val;
 };
-const deleteUsers = async () => {
-  await deleteUsersApi(ids.value);
-  ElMessage.error("禁用成功!");
+
+//获取id函数
+const getUserId = (users: User[]) => {
+  return users.map((item) => item.id);
+};
+//批量禁用 要去禁用，所以要没有禁用的数组
+const disableUsers = async () => {
+  selectedUsers.value = selectedUsers.value.filter((user) => {
+    return !user.status;
+  });
+  toggleUserStatus();
+};
+
+const toggleUserStatus = async (ids?: number[]) => {
+  const targetIds = ids ? ids : getUserId(selectedUsers.value);
+  const res = await deleteUsersApi(targetIds);
+  ElMessage.success(res.message);
   getUserlist();
+};
+//批量解禁
+const enableUsers = async () => {
+  selectedUsers.value = selectedUsers.value.filter((user) => {
+    return user.status;
+  });
+  toggleUserStatus();
 };
 getUserlist();
 </script>
