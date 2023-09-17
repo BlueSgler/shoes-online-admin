@@ -3,6 +3,7 @@ import axios, { AxiosError } from "axios";
 import type { AxiosRequestConfig } from "axios";
 import { ElLoading, ElMessage } from "element-plus";
 export const httpInstance = axios.create();
+console.log("recreate");
 
 export type BkResponse = {
   data: any;
@@ -16,6 +17,7 @@ httpInstance.defaults.baseURL = import.meta.env.VITE_BASEURL;
 
 //配置响应拦截器
 export const $http = async (config: AxiosRequestConfig) => {
+  // userInfoStore.authFromLoacl();
   const loadingInstance = ElLoading.service();
   try {
     const axiosResponse = await httpInstance<BkResponse>(config);
@@ -28,6 +30,9 @@ export const $http = async (config: AxiosRequestConfig) => {
         router.push("/login");
       } else if (bkResponse.code === 403) {
         errTilte = "Forbidden";
+      } else if (bkResponse.code === 400) {
+        errTilte = "BadRequest";
+        ElMessage.error(bkResponse.message);
       } else if (bkResponse.code === 9999) {
         errTilte = "9999Error";
       } else if (bkResponse.code === 500) {

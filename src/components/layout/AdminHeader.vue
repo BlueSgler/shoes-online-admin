@@ -4,15 +4,14 @@
     <div class="right-box">
       <div class="title">电商后台管理系统</div>
       <div class="avatar-box">
-        <el-avatar :src="userInfoStore.userinfo?.avater" />
+        <el-avatar :src="userinfo?.avater" />
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { useUserInfoStore } from "@/stores/userInfo.store";
-const userInfoStore = useUserInfoStore();
+import { userinfo } from "@/utils/authHandler";
 </script>
 
 <style lang="scss" scoped>

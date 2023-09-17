@@ -52,7 +52,7 @@
         </el-table-column>
         <el-table-column label="操作">
           <template #default="scope">
-            <el-button size="small" @click="handleEdit(scope.$index, scope.row)"
+            <el-button size="small" @click="openDialog(scope.row)"
               >编辑</el-button
             >
           </template>
@@ -68,15 +68,32 @@
         @current-change="getUserlist"
       />
     </el-card>
+    <el-dialog v-model="dialogFormVisible" title="修改用户信息" width="400px">
+      <el-form ref="editFormRef" :model="updateForm" :rules="rules">
+        <el-form-item label="昵称" prop="nicknName">
+          <el-input v-model="updateForm.nicknName" autocomplete="off" />
+        </el-form-item>
+        <el-form-item label="手机" prop="phoneNumber">
+          <el-input v-model="updateForm.phoneNumber" autocomplete="off" />
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="dialogFormVisible = false">取消</el-button>
+          <el-button type="primary" @click="handleEdit"> 确认 </el-button>
+        </span>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { getUserlistApi, deleteUsersApi } from "@/apis/users";
+import { getUserlistApi, deleteUsersApi, updateUsersApi } from "@/apis/users";
 import { ArrowRight, Search } from "@element-plus/icons-vue";
-import { ElMessage } from "element-plus";
+import { ElMessage, type FormInstance } from "element-plus";
 import type ElTable from "element-plus/es/components/table";
 import { ref } from "vue";
+import { rules } from "@/rules/userinfo";
 const total = ref<number>(10);
 const keyword = ref("");
 const query = ref({
@@ -98,8 +115,27 @@ interface User {
   updateTime: Date;
   username: string;
 }
-const handleEdit = (index: number, row: User) => {
-  console.log(index, row);
+
+const dialogFormVisible = ref(false);
+const updateForm = ref({
+  nicknName: "",
+  phoneNumber: "",
+});
+const editFormRef = ref<FormInstance>();
+const openDialog = (row: User) => {
+  dialogFormVisible.value = true;
+  updateForm.value.nicknName = row.nickname;
+  updateForm.value.phoneNumber = row.phoneNumber;
+  editUserId.value = row.id;
+};
+
+const editUserId = ref(-1);
+const handleEdit = async () => {
+  await editFormRef.value?.validate()
+  await updateUsersApi(editUserId.value, updateForm.value);
+  ElMessage.success("修改成功！");
+  dialogFormVisible.value = false;
+  getUserlist();
 };
 
 const tableData = ref<User[]>([]);
@@ -146,7 +182,7 @@ const toggleUserStatus = async (ids?: number[]) => {
   const targetIds = ids ? ids : getUserId(selectedUsers.value);
   const res = await deleteUsersApi(targetIds);
   ElMessage.success(res.message);
-  getUserlist();
+  // getUserlist();
 };
 //批量解禁
 const enableUsers = async () => {

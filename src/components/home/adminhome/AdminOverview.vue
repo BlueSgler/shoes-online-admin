@@ -1,8 +1,8 @@
 <template>
   <div id="overview">
     <div class="userinfo">
-      <el-avatar :src="userInfoStore.userinfo?.avater" />
-      <span class="username">{{ userInfoStore.userinfo?.nickname }}</span>
+      <el-avatar :src="userinfo?.avater" />
+      <span class="username">{{ userinfo?.nickname }}</span>
     </div>
     <div class="overview-list">
       <div
@@ -28,9 +28,8 @@
 </template>
 
 <script setup lang="ts">
-import { useUserInfoStore } from "@/stores/userInfo.store";
-const userInfoStore = useUserInfoStore();
 import { ref } from "vue";
+import { userinfo } from "@/utils/authHandler";
 
 interface SingleData {
   id: number;

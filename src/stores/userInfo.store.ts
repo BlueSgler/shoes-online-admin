@@ -15,12 +15,20 @@ export interface Userinfo {
 
 export const useUserInfoStore = defineStore("userinfo-store", () => {
   const userinfo = ref<Userinfo>();
-  const setAuth = (token: string) => {    
+  const setAuth = (token: string) => {
+    console.log("set auth");
+
     httpInstance.defaults.headers.common.Authorization = token;
+    console.log(
+      "set finish",
+      httpInstance.defaults.headers.common.Authorization
+    );
+
     localStorage.setItem("token", token);
   };
   const authFromLoacl = () => {
     const token = localStorage.getItem("token");
+
     if (token) {
       setAuth(token);
       return true;

@@ -17,6 +17,7 @@ async function asyncRegister() {
   app.use(createPinia());
   const router = (await import("@/router")).default;
   app.use(router);
+  console.log("remount");
 
   app.mount("#app");
 }
