@@ -40,7 +40,8 @@ import type { FormInstance } from "element-plus";
 import { Lock, User } from "@element-plus/icons-vue";
 import { loginApi } from "@/apis/login";
 import router from "@/router";
-import { setAuth } from "@/utils/authHandler";
+import { useUserInfoStore } from "@/stores/userInfo.store";
+const userInfoStore = useUserInfoStore();
 type Form = {
   username: string;
   password: string;
@@ -55,7 +56,7 @@ const formRef = ref<FormInstance>();
 
 const login = async () => {
   const res = await loginApi(form.value);
-  setAuth(res.data.token);
+  userInfoStore.setAuth(res.data.token);
   router.push("/home/admin-home");
 };
 

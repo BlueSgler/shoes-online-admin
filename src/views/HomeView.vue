@@ -18,12 +18,13 @@
 <script setup lang="ts">
 import AdminHeader from "@/components/layout/AdminHeader.vue";
 import AdminMenu from "@/components/layout/AdminMenu.vue";
-import { userinfo } from "@/utils/authHandler";
+import { useUserInfoStore } from "@/stores/userInfo.store";
+const userInfoStore = useUserInfoStore();
 import { getUserinfoApi } from "@/apis/login";
 import type { BkResponse } from "@/apis";
 const getUserinfo = async () => {
   const res: BkResponse = await getUserinfoApi();
-  userinfo.value = res.data;
+  userInfoStore.userinfo = res.data;
 };
 getUserinfo();
 </script>

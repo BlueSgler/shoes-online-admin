@@ -26,7 +26,7 @@ export const useUserInfoStore = defineStore("userinfo-store", () => {
 
     localStorage.setItem("token", token);
   };
-  const authFromLoacl = () => {
+  const authFromLocal = () => {
     const token = localStorage.getItem("token");
 
     if (token) {
@@ -40,5 +40,5 @@ export const useUserInfoStore = defineStore("userinfo-store", () => {
     localStorage.removeItem("token");
     router.push("/login");
   };
-  return { userinfo, setAuth, authFromLoacl, removeAuth };
+  return { userinfo, setAuth, authFromLocal, removeAuth };
 });
